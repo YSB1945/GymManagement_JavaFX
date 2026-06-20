@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.gymproject.controllers.MainController"
+    styleClass="root-pane">
+
+    <!-- =====================================================
+         HAUT : MenuBar
+         Valide les contrôles : Menu, MenuBar, MenuItem
+    ====================================================== -->
+    <top>
+        <MenuBar styleClass="menu-bar">
+
+            <Menu text="📁 Fichier">
+                <MenuItem
+                    fx:id="menuQuitter"
+                    text="Quitter"
+                    onAction="#handleQuitter"/>
+            </Menu>
+
+            <Menu text="📋 Navigation">
+                <MenuItem text="Membres"
+                          onAction="#handleNavMembres"/>
+                <MenuItem text="Abonnements"
+                          onAction="#handleNavAbonnements"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Statistiques"
+                          onAction="#handleNavStatistiques"/>
+            </Menu>
+
+            <Menu text="❓ Aide">
+                <MenuItem text="À propos"
+                          onAction="#handleAPropos"/>
+            </Menu>
+
+        </MenuBar>
+    </top>
+
+    <!-- =====================================================
+         GAUCHE : Menu latéral de navigation
+         Valide les contrôles : Button, Label, VBox
+    ====================================================== -->
+    <left>
+        <VBox
+            fx:id="sideMenu"
+            styleClass="side-menu"
+            spacing="8"
+            alignment="TOP_CENTER">
+
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+
+            <!-- Logo / titre de l'app -->
+            <Label
+                text="🏋️ Club Sportif"
+                styleClass="side-menu-title"
+                wrapText="true"
+                alignment="CENTER"/>
+
+            <Separator styleClass="side-separator"/>
+
+            <!-- Boutons de navigation -->
+            <Button
+                fx:id="btnMembres"
+                text="👤  Membres"
+                styleClass="nav-button, nav-button-active"
+                maxWidth="Infinity"
+                onAction="#handleNavMembres">
+                <tooltip>
+                    <Tooltip text="Gérer les membres du club"/>
+                </tooltip>
+            </Button>
+
+            <Button
+                fx:id="btnAbonnements"
+                text="📋  Abonnements"
+                styleClass="nav-button"
+                maxWidth="Infinity"
+                onAction="#handleNavAbonnements">
+                <tooltip>
+                    <Tooltip text="Gérer les abonnements"/>
+                </tooltip>
+            </Button>
+
+            <Button
+                fx:id="btnStatistiques"
+                text="📊  Statistiques"
+                styleClass="nav-button"
+                maxWidth="Infinity"
+                onAction="#handleNavStatistiques">
+                <tooltip>
+                    <Tooltip text="Tableau de bord et indicateurs"/>
+                </tooltip>
+            </Button>
+
+            <!-- Espaceur pour pousser le statut en bas -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Separator styleClass="side-separator"/>
+
+            <!-- Indicateur de connexion DB en bas du menu -->
+            <Label
+                fx:id="labelStatutDB"
+                text="⚡ Base de données connectée"
+                styleClass="db-status-label"
+                wrapText="true"
+                alignment="CENTER"/>
+
+        </VBox>
+    </left>
+
+    <!-- =====================================================
+         CENTRE : Zone de contenu dynamique
+         Les vues Membres, Abonnements, Statistiques
+         seront injectées ici à la navigation
+    ====================================================== -->
+    <center>
+        <StackPane
+            fx:id="contentArea"
+            styleClass="content-area">
+
+            <!-- Vue d'accueil affichée au démarrage -->
+            <VBox
+                fx:id="welcomePane"
+                alignment="CENTER"
+                spacing="15">
+
+                <Label
+                    text="🏋️"
+                    styleClass="welcome-icon"/>
+
+                <Label
+                    text="Bienvenue dans Club Sportif Manager"
+                    styleClass="welcome-title"/>
+
+                <Label
+                    text="Sélectionnez une section dans le menu de gauche pour commencer."
+                    styleClass="welcome-subtitle"
+                    wrapText="true"
+                    alignment="CENTER"/>
+
+            </VBox>
+
+        </StackPane>
+    </center>
+
+    <!-- =====================================================
+         BAS : Barre de statut
+    ====================================================== -->
+    <bottom>
+        <HBox
+            styleClass="status-bar"
+            spacing="10"
+            alignment="CENTER_LEFT">
+
+            <padding>
+                <Insets top="5" right="15" bottom="5" left="15"/>
+            </padding>
+
+            <Label
+                fx:id="labelStatutAction"
+                text="Prêt"
+                styleClass="status-label"/>
+
+            <!-- Spacer -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label
+                fx:id="labelVersion"
+                text="v1.0 — ENSAO GI3 2025/2026"
+                styleClass="status-label-right"/>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.gymproject.controllers.StatistiquesController" spacing="12" styleClass="content-pane">
+
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+    <!-- ===== EN-TÊTE ===== -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="📊 Tableau de Bord" styleClass="page-title" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="🔃 Actualiser les données" onAction="#handleActualiser" styleClass="btn-refresh" />
+        <Button text="📥 Exporter CSV" onAction="#handleExporterCSV" styleClass="btn-export" />
+    </HBox>
+
+    <Separator />
+
+    <!-- ===== CARTES DE STATISTIQUES RAPIDES ===== -->
+    <HBox spacing="12">
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="👥 Total Membres" styleClass="stat-card-title" />
+            <Label fx:id="labelTotalMembres" text="—" styleClass="stat-card-value" />
+        </VBox>
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="📋 Total Abonnements" styleClass="stat-card-title" />
+            <Label fx:id="labelTotalAbonnements" text="—" styleClass="stat-card-value" />
+        </VBox>
+        <VBox styleClass="stat-card stat-card-green" HBox.hgrow="ALWAYS">
+            <Label text="✅ Abonnements Payés" styleClass="stat-card-title" />
+            <Label fx:id="labelAbonnementsPayes" text="—" styleClass="stat-card-value" />
+        </VBox>
+        <VBox styleClass="stat-card stat-card-red" HBox.hgrow="ALWAYS">
+            <Label text="⚠️ Expirent Bientôt" styleClass="stat-card-title" />
+            <Label fx:id="labelExpirantBientot" text="—" styleClass="stat-card-value-red" />
+        </VBox>
+    </HBox>
+
+    <!-- ===== ACCORDION (sections dépliables) ===== -->
+    <Accordion fx:id="accordion" VBox.vgrow="ALWAYS">
+        <panes>
+            <!-- VOLET 1 : Chiffre d'affaires & Objectif -->
+            <TitledPane text="💰 Chiffre d'Affaires &amp; Objectif Mensuel" expanded="true">
+                <content>
+                    <VBox spacing="14">
+                        <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                        
+                        <HBox spacing="20">
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="CA Total (DH)" styleClass="field-label" />
+                                <Label fx:id="labelCATotal" text="—" styleClass="ca-value" />
+                            </VBox>
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="CA Encaissé (DH)" styleClass="field-label" />
+                                <Label fx:id="labelCAEncaisse" text="—" styleClass="ca-value-green" />
+                            </VBox>
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label text="CA En Attente (DH)" styleClass="field-label" />
+                                <Label fx:id="labelCAAttente" text="—" styleClass="ca-value-red" />
+                            </VBox>
+                        </HBox>
+
+                        <Separator />
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Label text="🎯 Objectif mensuel :" styleClass="field-label" />
+                            <Label fx:id="labelObjectif" text="5 000 DH" styleClass="objectif-label" />
+                        </HBox>
+
+                        <Slider fx:id="objectifSlider" min="1000" max="20000" value="5000" majorTickUnit="2000" minorTickCount="3" showTickLabels="true" showTickMarks="true" snapToTicks="false" onMouseDragged="#handleSliderChange" onMouseClicked="#handleSliderChange" />
+
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Progression vers l'objectif :" styleClass="field-label" />
+                                <Label fx:id="labelProgression" text="0 %" styleClass="progression-label" />
+                            </HBox>
+                            <ProgressBar fx:id="progressBar" progress="0" maxWidth="Infinity" prefHeight="20" styleClass="objectif-progressbar" />
+                        </VBox>
+                    </VBox>
+                </content>
+            </TitledPane>
+
+            <!-- VOLET 2 : Répartition par type -->
+            <TitledPane text="📈 Répartition des Abonnements par Type">
+                <content>
+                    <VBox spacing="10">
+                        <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="📅 Mensuel" styleClass="field-label" prefWidth="120" />
+                            <Label fx:id="labelNbMensuel" text="0" styleClass="repartition-count" />
+                            <ProgressBar fx:id="barMensuel" progress="0" prefWidth="250" prefHeight="16" styleClass="repartition-bar" />
+                            <Label fx:id="labelCaMensuel" text="0.00 DH" styleClass="repartition-ca" />
+                        </HBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="📆 Trimestriel" styleClass="field-label" prefWidth="120" />
+                            <Label fx:id="labelNbTrimestriel" text="0" styleClass="repartition-count" />
+                            <ProgressBar fx:id="barTrimestriel" progress="0" prefWidth="250" prefHeight="16" styleClass="repartition-bar-orange" />
+                            <Label fx:id="labelCaTrimestriel" text="0.00 DH" styleClass="repartition-ca" />
+                        </HBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="📊 Annuel" styleClass="field-label" prefWidth="120" />
+                            <Label fx:id="labelNbAnnuel" text="0" styleClass="repartition-count" />
+                            <ProgressBar fx:id="barAnnuel" progress="0" prefWidth="250" prefHeight="16" styleClass="repartition-bar-green" />
+                            <Label fx:id="labelCaAnnuel" text="0.00 DH" styleClass="repartition-ca" />
+                        </HBox>
+                    </VBox>
+                </content>
+            </TitledPane>
+
+            <!-- VOLET 3 : Alertes membres à relancer -->
+            <TitledPane text="🚨 Abonnements à Relancer (Expirés ou Expirant Bientôt)">
+                <content>
+                    <VBox spacing="8">
+                        <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                        
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Membres nécessitant un suivi :" styleClass="field-label" />
+                            <Label fx:id="labelNbARelancer" text="0" styleClass="ca-value-red" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <ProgressIndicator fx:id="loadingIndicator" prefWidth="24" prefHeight="24" visible="false" />
+                        </HBox>
+
+                        <ListView fx:id="listeMembresARelancer" prefHeight="180" styleClass="relancer-list">
+                            <placeholder>
+                                <Label text="Aucun abonnement à relancer." />
+                            </placeholder>
+                        </ListView>
+                    </VBox>
+                </content>
+            </TitledPane>
+
+            <!-- VOLET 4 : Export CSV -->
+            <TitledPane text="📥 Export des Données">
+                <content>
+                    <VBox spacing="12">
+                        <padding><Insets top="12" right="15" bottom="12" left="15"/></padding>
+                        
+                        <Label text="Exportez la liste complète des abonnements au format CSV." styleClass="field-label" wrapText="true" />
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                <Label text="Colonnes exportées :" styleClass="field-label" />
+                                <Label text="ID · Membre · Type · Début · Fin · Prix · Payé · Statut · Remarques" styleClass="export-hint" wrapText="true" />
+                            </VBox>
+                        </HBox>
+
+                        <Button text="📥  Exporter tous les abonnements en CSV" onAction="#handleExporterCSV" styleClass="btn-export" maxWidth="Infinity" />
+                        
+                        <Label fx:id="labelExportStatut" text="" styleClass="export-statut" wrapText="true" />
+                    </VBox>
+                </content>
+            </TitledPane>
+        </panes>
+    </Accordion>
+</VBox>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.gymproject.controllers.AbonnementController"
+      spacing="10" styleClass="content-pane">
+
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+    <!-- ===== EN-TÊTE ===== -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="📋 Gestion des Abonnements" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Filtre par type -->
+        <Label text="Filtrer :" styleClass="field-label"/>
+        <ComboBox fx:id="filtreTypeCombo" promptText="Tous les types"
+                  prefWidth="160" onAction="#handleFiltreType">
+            <tooltip><Tooltip text="Filtrer le tableau par type d'abonnement"/></tooltip>
+        </ComboBox>
+
+        <!-- Filtre par statut paiement -->
+        <ComboBox fx:id="filtreStatutCombo" promptText="Tous les statuts"
+                  prefWidth="160" onAction="#handleFiltreStatut">
+            <tooltip><Tooltip text="Filtrer par statut de paiement"/></tooltip>
+        </ComboBox>
+
+        <Button text="✕ Réinitialiser" onAction="#handleReinitialiserFiltres"
+                styleClass="btn-clear"/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- ===== CONTENU PRINCIPAL ===== -->
+    <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.38">
+
+        <!-- ============ FORMULAIRE (gauche) ============ -->
+        <ScrollPane fitToWidth="true" styleClass="form-scroll">
+            <VBox spacing="10" styleClass="form-pane">
+                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+
+                <Label text="Nouvel abonnement" styleClass="section-title"/>
+                <Separator/>
+
+                <!-- Membre lié -->
+                <Label text="Membre *" styleClass="field-label"/>
+                <ComboBox fx:id="membreCombo" promptText="Sélectionner un membre"
+                          maxWidth="Infinity">
+                    <tooltip>
+                        <Tooltip text="Choisissez le membre à abonner"/>
+                    </tooltip>
+                </ComboBox>
+
+                <!-- Type d'abonnement -->
+                <Label text="Type d'abonnement *" styleClass="field-label"/>
+                <ComboBox fx:id="typeAbonnementCombo"
+                          promptText="Choisir un type"
+                          maxWidth="Infinity">
+                    <tooltip>
+                        <Tooltip text="Mensuel : 1 mois | Trimestriel : 3 mois | Annuel : 12 mois"/>
+                    </tooltip>
+                </ComboBox>
+
+                <!-- Date de début -->
+                <Label text="Date de début *" styleClass="field-label"/>
+                <DatePicker fx:id="dateDebutPicker" promptText="jj/mm/aaaa"
+                            maxWidth="Infinity" onAction="#handleDateDebutChange">
+                    <tooltip>
+                        <Tooltip text="La date de fin sera calculée automatiquement"/>
+                    </tooltip>
+                </DatePicker>
+
+                <!-- Date de fin -->
+                <Label text="Date de fin *" styleClass="field-label"/>
+                <DatePicker fx:id="dateFinPicker" promptText="jj/mm/aaaa"
+                            maxWidth="Infinity">
+                    <tooltip>
+                        <Tooltip text="Calculée automatiquement selon le type d'abonnement"/>
+                    </tooltip>
+                </DatePicker>
+
+                <!-- Prix avec Spinner -->
+                <Label text="Prix (DH) *" styleClass="field-label"/>
+                <Spinner fx:id="prixSpinner" min="0" max="99999"
+                         initialValue="150" editable="true"
+                         maxWidth="Infinity">
+                    <tooltip>
+                        <Tooltip text="Saisissez le montant en DH (utilisez les flèches pour ajuster)"/>
+                    </tooltip>
+                </Spinner>
+
+                <!-- Statut Payé -->
+                <CheckBox fx:id="payeCheckBox" text="Abonnement payé"
+                          styleClass="check-actif">
+                    <tooltip>
+                        <Tooltip text="Cochez si le paiement a été encaissé"/>
+                    </tooltip>
+                </CheckBox>
+
+                <!-- Remarques -->
+                <Label text="Remarques" styleClass="field-label"/>
+                <TextArea fx:id="remarquesArea"
+                          promptText="Notes, conditions particulières..."
+                          prefRowCount="3" wrapText="true"
+                          styleClass="remarques-area">
+                    <tooltip>
+                        <Tooltip text="Informations complémentaires sur cet abonnement"/>
+                    </tooltip>
+                </TextArea>
+
+                <Separator/>
+
+                <!-- Boutons d'action -->
+                <Label text="Actions" styleClass="section-title"/>
+
+                <Button fx:id="btnAjouter" text="➕  Ajouter"
+                        maxWidth="Infinity" styleClass="btn-primary"
+                        onAction="#handleAjouter">
+                    <tooltip><Tooltip text="Enregistrer ce nouvel abonnement"/></tooltip>
+                </Button>
+
+                <Button fx:id="btnModifier" text="✏️  Modifier"
+                        maxWidth="Infinity" styleClass="btn-warning"
+                        onAction="#handleModifier" disable="true">
+                    <tooltip><Tooltip text="Modifier l'abonnement sélectionné"/></tooltip>
+                </Button>
+
+                <Button fx:id="btnSupprimer" text="🗑️  Supprimer"
+                        maxWidth="Infinity" styleClass="btn-danger"
+                        onAction="#handleSupprimer" disable="true">
+                    <tooltip><Tooltip text="Supprimer l'abonnement sélectionné"/></tooltip>
+                </Button>
+
+                <Button fx:id="btnVider" text="🔄  Vider les champs"
+                        maxWidth="Infinity" styleClass="btn-secondary"
+                        onAction="#handleVider">
+                    <tooltip><Tooltip text="Réinitialiser le formulaire"/></tooltip>
+                </Button>
+
+                <Separator/>
+
+                <!-- ID sélectionné -->
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Label text="ID sélectionné :" styleClass="field-label"/>
+                    <Label fx:id="labelIdSelectionne" text="—" styleClass="id-label"/>
+                </HBox>
+
+                <!-- Statut de l'abonnement sélectionné -->
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Label text="Statut :" styleClass="field-label"/>
+                    <Label fx:id="labelStatut" text="—" styleClass="id-label"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+
+        <!-- ============ TABLEAU (droite) ============ -->
+        <VBox spacing="8">
+            <padding><Insets top="5" right="5" bottom="5" left="10"/></padding>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="📋 Liste des abonnements" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="labelCompteur" text="Total : 0 abonnement(s)"
+                       styleClass="counter-label"/>
+                <Button text="🔃 Actualiser" onAction="#handleActualiser"
+                        styleClass="btn-refresh"/>
+            </HBox>
+
+            <TableView fx:id="abonnementsTable" VBox.vgrow="ALWAYS" styleClass="main-table">
+    <placeholder>
+        <Label text="Aucun abonnement enregistré." />
+    </placeholder>
+    <columns>
+        <TableColumn fx:id="colId"        text="ID"         prefWidth="45"/>
+        <TableColumn fx:id="colMembre"    text="Membre"     prefWidth="140"/>
+        <TableColumn fx:id="colType"      text="Type"       prefWidth="100"/>
+        <TableColumn fx:id="colDateDebut" text="Début"      prefWidth="90"/>
+        <TableColumn fx:id="colDateFin"   text="Fin"        prefWidth="90"/>
+        <TableColumn fx:id="colPrix"      text="Prix (DH)"  prefWidth="85"/>
+        <TableColumn fx:id="colPaye"      text="Payé"       prefWidth="60"/>
+        <TableColumn fx:id="colStatut"    text="Statut"     prefWidth="110"/>
+        <TableColumn fx:id="colRemarques" text="Remarques"  prefWidth="150"/>
+    </columns>
+</TableView>
+
+        </VBox>
+
+    </SplitPane>
+
+</VBox>

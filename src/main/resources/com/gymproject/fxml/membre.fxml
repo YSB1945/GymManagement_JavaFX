@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.gymproject.controllers.MembreController"
+      spacing="10" styleClass="content-pane">
+
+    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+    <!-- ===== EN-TÊTE ===== -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="👤 Gestion des Membres" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchField" promptText="🔍  Rechercher un membre..."
+                   styleClass="search-field" prefWidth="250"
+                   onKeyReleased="#handleRecherche"/>
+        <Button text="✕" onAction="#handleViderRecherche" styleClass="btn-clear"/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- ===== CONTENU PRINCIPAL : Formulaire + Tableau ===== -->
+    <SplitPane VBox.vgrow="ALWAYS" dividerPositions="0.35">
+
+        <!-- ============ FORMULAIRE (gauche) ============ -->
+        <ScrollPane fitToWidth="true" styleClass="form-scroll">
+            <VBox spacing="10" styleClass="form-pane">
+                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+
+                <Label text="Informations du membre" styleClass="section-title"/>
+                <Separator/>
+
+                <!-- Nom -->
+                <Label text="Nom *" styleClass="field-label"/>
+                <TextField fx:id="nomField" promptText="Nom de famille">
+                    <tooltip><Tooltip text="Entrez le nom de famille du membre"/></tooltip>
+                </TextField>
+
+                <!-- Prénom -->
+                <Label text="Prénom *" styleClass="field-label"/>
+                <TextField fx:id="prenomField" promptText="Prénom">
+                    <tooltip><Tooltip text="Entrez le prénom du membre"/></tooltip>
+                </TextField>
+
+                <!-- Email -->
+                <Label text="Email *" styleClass="field-label"/>
+                <TextField fx:id="emailField" promptText="exemple@email.com">
+                    <tooltip><Tooltip text="Adresse email unique du membre"/></tooltip>
+                </TextField>
+
+                <!-- Téléphone -->
+                <Label text="Téléphone" styleClass="field-label"/>
+                <TextField fx:id="telephoneField" promptText="06XXXXXXXX">
+                    <tooltip><Tooltip text="Numéro de téléphone (optionnel)"/></tooltip>
+                </TextField>
+
+                <!-- Sexe -->
+                <Label text="Sexe *" styleClass="field-label"/>
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <RadioButton fx:id="radioMasculin" text="Masculin" styleClass="radio-btn">
+                        <tooltip><Tooltip text="Sélectionner Masculin"/></tooltip>
+                    </RadioButton>
+                    <RadioButton fx:id="radioFeminin" text="Féminin" styleClass="radio-btn">
+                        <tooltip><Tooltip text="Sélectionner Féminin"/></tooltip>
+                    </RadioButton>
+                </HBox>
+
+                <!-- Date de naissance -->
+                <Label text="Date de naissance *" styleClass="field-label"/>
+                <DatePicker fx:id="dateNaissancePicker" promptText="jj/mm/aaaa"
+                            maxWidth="Infinity">
+                    <tooltip><Tooltip text="Date de naissance du membre"/></tooltip>
+                </DatePicker>
+
+                <!-- Sport pratiqué -->
+                <Label text="Sport pratiqué *" styleClass="field-label"/>
+                <TextField fx:id="sportPratiqueField" promptText="Football, Natation...">
+                    <tooltip><Tooltip text="Sport principal pratiqué au club"/></tooltip>
+                </TextField>
+
+                <!-- Date d'inscription -->
+                <Label text="Date d'inscription *" styleClass="field-label"/>
+                <DatePicker fx:id="dateInscriptionPicker" promptText="jj/mm/aaaa"
+                            maxWidth="Infinity">
+                    <tooltip><Tooltip text="Date d'adhésion au club"/></tooltip>
+                </DatePicker>
+
+                <!-- Actif -->
+                <CheckBox fx:id="actifCheckBox" text="Membre actif"
+                          styleClass="check-actif" selected="true">
+                    <tooltip><Tooltip text="Décochez si le membre est suspendu"/></tooltip>
+                </CheckBox>
+
+                <Separator/>
+
+                <!-- Boutons d'action -->
+                <Label text="Actions" styleClass="section-title"/>
+
+                <Button fx:id="btnAjouter" text="➕  Ajouter"
+                        maxWidth="Infinity" styleClass="btn-primary"
+                        onAction="#handleAjouter">
+                    <tooltip><Tooltip text="Enregistrer un nouveau membre"/></tooltip>
+                </Button>
+
+                <Button fx:id="btnModifier" text="✏️  Modifier"
+                        maxWidth="Infinity" styleClass="btn-warning"
+                        onAction="#handleModifier" disable="true">
+                    <tooltip><Tooltip text="Modifier le membre sélectionné"/></tooltip>
+                </Button>
+
+                <Button fx:id="btnSupprimer" text="🗑️  Supprimer"
+                        maxWidth="Infinity" styleClass="btn-danger"
+                        onAction="#handleSupprimer" disable="true">
+                    <tooltip><Tooltip text="Supprimer le membre sélectionné"/></tooltip>
+                </Button>
+
+                <Button fx:id="btnVider" text="🔄  Vider les champs"
+                        maxWidth="Infinity" styleClass="btn-secondary"
+                        onAction="#handleVider">
+                    <tooltip><Tooltip text="Réinitialiser le formulaire"/></tooltip>
+                </Button>
+
+                <Separator/>
+
+                <!-- Indicateur ID sélectionné -->
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Label text="ID sélectionné :" styleClass="field-label"/>
+                    <Label fx:id="labelIdSelectionne" text="—" styleClass="id-label"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+
+        <!-- ============ TABLEAU (droite) ============ -->
+        <VBox spacing="8">
+            <padding><Insets top="5" right="5" bottom="5" left="10"/></padding>
+
+            <!-- Barre d'info au-dessus du tableau -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="📋 Liste des membres" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="labelCompteur" text="Total : 0 membre(s)"
+                       styleClass="counter-label"/>
+                <Button text="🔃 Actualiser" onAction="#handleActualiser"
+                        styleClass="btn-refresh"/>
+            </HBox>
+
+            <!-- TableView principal -->
+           <TableView fx:id="membresTable" VBox.vgrow="ALWAYS" styleClass="main-table">
+    <placeholder>
+        <Label text="Aucun membre enregistré." />
+    </placeholder>
+    <columns>
+        <TableColumn fx:id="colId"           text="ID"          prefWidth="50"/>
+        <TableColumn fx:id="colNom"          text="Nom"         prefWidth="100"/>
+        <TableColumn fx:id="colPrenom"       text="Prénom"      prefWidth="100"/>
+        <TableColumn fx:id="colEmail"        text="Email"       prefWidth="170"/>
+        <TableColumn fx:id="colTelephone"    text="Téléphone"   prefWidth="110"/>
+        <TableColumn fx:id="colSexe"         text="Sexe"        prefWidth="60"/>
+        <TableColumn fx:id="colDateNaiss"    text="Naissance"   prefWidth="100"/>
+        <TableColumn fx:id="colSport"        text="Sport"       prefWidth="100"/>
+        <TableColumn fx:id="colDateInscr"    text="Inscription" prefWidth="100"/>
+        <TableColumn fx:id="colActif"        text="Actif"       prefWidth="60"/>
+    </columns>
+</TableView>
+
+        </VBox>
+
+    </SplitPane>
+
+</VBox>
