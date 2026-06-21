@@ -99,7 +99,7 @@ private static final String PASSWORD = "root";   // ← Modifier si nécessaire
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/votre-repo/GymManagement_JavaFX.git
+git clone https://github.com/YSB1945/GymManagement_JavaFX.git
 cd GymManagement_JavaFX
 
 # 2. Compiler et lancer
